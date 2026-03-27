@@ -35,10 +35,6 @@ def _cabecalho(instrucoes):
     ]
 
 
-# ---------------------------------------------
-#  Exibe resultado nos LEDs (0xFF200000)
-#  Converte F32 -> F64 e pisca MSB depois LSB
-# ---------------------------------------------
 def _mostrar_resultado(instrucoes, sreg):
     instrucoes += [
         f"",
@@ -70,7 +66,7 @@ def _gerar_res(instrucoes, creg, linha_idx, literais):
     instrucoes += [
         f"",
         f"    @ (N RES) - busca resultado N posicoes atras",
-        f"    VCVT.S32.F32 s{reg_n}, s{reg_n}",   # float N -> int
+        f"    VCVT.S32.F32 s{reg_n}, s{reg_n}",   
         f"    VMOV r1, s{reg_n}",                   # r1 = N
         f"    LDR r2, ={linha_idx}",                # r2 = indice linha atual
         f"    SUB r1, r2, r1",                      # r1 = linha_atual - N
@@ -82,8 +78,8 @@ def _gerar_res(instrucoes, creg, linha_idx, literais):
         f"    B {lbl_end}",
         f"{lbl_ok}:",
         f"    LDR r2, =res_array",
-        f"    ADD r2, r2, r1, LSL #2",              # endereco = base + idx*4
-        f"    VLDR s{reg_n}, [r2]",                 # carrega resultado anterior
+        f"    ADD r2, r2, r1, LSL #2",              
+        f"    VLDR s{reg_n}, [r2]",                 
         f"{lbl_end}:",
     ]
     # N e substituido pelo valor buscado, contador nao muda
